@@ -1,0 +1,50 @@
+- name: Import the OpenGeo GPG key
+  shell: wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -
+
+- name: Add the OpenGeo repository
+  shell: echo "deb {{ test_url }} precise main" > /etc/apt/sources.list.d/opengeo.list
+
+- name: update repository
+  command: 'apt-get update'
+
+- name: search for opengeo packages
+  command: 'apt-cache search opengeo'
+
+- name: Install opengeo
+  apt: name=opengeo update_cache=yes force=yes
+  register: openg
+
+- name: Install geoserver-gdal
+  apt: name=geoserver-gdal force=yes
+  when: wps and openg|success
+
+- name: Install wps extension
+  apt: name=geoserver-wps force=yes
+  when: wps and openg|success
+
+- name: Install mapmeter extension
+  apt: name=geoserver-mapmeter force=yes
+  when: mapmeter and openg|success
+
+- name: Install css extension
+  apt: name=geoserver-css force=yes
+  when: css and openg|success
+
+- name: Install csw extension
+  apt: name=geoserver-csw force=yes
+  when: csw and openg|success
+
+- name: Install script extension
+  apt: name=geoserver-script force=yes
+  when: script and openg|success
+
+- name: Install mongodb extension
+  apt: name=geoserver-mongodb force=yes
+  when: mongodb and openg|success
+
+- name: Install geopackage extension
+  apt: name=geoserver-geopackage force=yes
+  when: geopackage and openg|success
+
+- name: Restart Tomcat
+  service: name=tomcat6 state=restarted

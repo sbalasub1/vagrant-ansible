@@ -1,0 +1,11 @@
+gdal: true
+wps: true
+mapmeter: true
+cluster: true
+jdbcconfig: true
+css: true
+csw: true
+script: true
+mongodb: true
+geopackage: true
+test_url: http://apt.opengeo.org/suite/v4/ubuntu/
